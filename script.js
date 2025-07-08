@@ -307,13 +307,13 @@ function sendEmailWithFormspree(name, email, message, submitBtn, originalText, f
 function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
     console.log('🔧 sendViaWhatsApp llamada con:', { name, email, message });
     
-    const whatsappMessage = `🏆 *NUEVO MENSAJE - DanySetas*
+    const whatsappMessage = `NUEVO MENSAJE - DanySetas
 
-👤 *Nombre:* ${name}
-📧 *Email:* ${email}
-💬 *Mensaje:* ${message}
+Nombre: ${name}
+Email: ${email}
+Mensaje: ${message}
 
-_Enviado desde www.danysetas.com_`;
+Enviado desde www.danysetas.com`;
     
     console.log('📱 Mensaje generado:', whatsappMessage);
     
@@ -751,25 +751,25 @@ function setupWhatsAppCart() {
 
 // 💬 GENERAR MENSAJE DE WHATSAPP PARA CARRITO
 function generateCartWhatsAppMessage() {
-    let message = `🛒 *NUEVA COMPRA - DanySetas*
+    let message = `NUEVA COMPRA - DanySetas
 
 `;
     
     cart.forEach((item, index) => {
         message += `${index + 1}. ${item.name}
-   💰 $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}
+Precio: $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}
 
 `;
     });
     
-    message += `💸 *TOTAL: $${cartTotal.toFixed(2)}*
+    message += `TOTAL: $${cartTotal.toFixed(2)}
 
-📞 Por favor confirma tu pedido y envíanos tus datos:
-• Nombre completo
-• Dirección de envío
-• Talla preferida
+Por favor confirma tu pedido y envíanos tus datos:
+- Nombre completo
+- Dirección de envío
+- Talla preferida
 
-_Enviado desde www.danysetas.com_`;
+Enviado desde www.danysetas.com`;
     
     return message;
 }
