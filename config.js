@@ -54,10 +54,11 @@ const CONFIG = {
 
 // Función para generar enlaces de WhatsApp con doble número
 function generateWhatsAppLink(product = "", message = "", useSecondary = false) {
-    const baseMessage = message || CONFIG.whatsapp.defaultMessage;
+    // Si hay mensaje personalizado, usarlo directamente
+    const finalMessage = message ? message : CONFIG.whatsapp.defaultMessage;
     const fullMessage = product ? 
-        `${baseMessage}\n\nProducto: ${product}` : 
-        baseMessage;
+        `${finalMessage}\n\nProducto: ${product}` : 
+        finalMessage;
     
     // Usar número secundario para ventas, principal para contacto general
     const whatsappNumber = useSecondary ? CONFIG.business.whatsapp_secondary : CONFIG.business.whatsapp;
@@ -67,12 +68,26 @@ function generateWhatsAppLink(product = "", message = "", useSecondary = false) 
 
 // Función específica para ventas (usa el número Mío Movistar)
 function generateSalesWhatsAppLink(product = "", message = "") {
-    return generateWhatsAppLink(product, message, true);
+    console.log('🔧 generateSalesWhatsAppLink llamada con:', { product, message });
+    const whatsappNumber = CONFIG.business.whatsapp_secondary;
+    const finalMessage = message || CONFIG.whatsapp.defaultMessage;
+    console.log('📞 Número ventas:', whatsappNumber);
+    console.log('📱 Mensaje final ventas:', finalMessage);
+    const link = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(finalMessage)}`;
+    console.log('🔗 Link ventas final:', link);
+    return link;
 }
 
 // Función específica para contacto general (usa el número DanySetas)
 function generateContactWhatsAppLink(message = "") {
-    return generateWhatsAppLink("", message, false);
+    console.log('🔧 generateContactWhatsAppLink llamada con mensaje:', message);
+    const whatsappNumber = CONFIG.business.whatsapp;
+    const finalMessage = message || CONFIG.whatsapp.defaultMessage;
+    console.log('📞 Número:', whatsappNumber);
+    console.log('📱 Mensaje final:', finalMessage);
+    const link = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(finalMessage)}`;
+    console.log('🔗 Link final:', link);
+    return link;
 }
 
 // Función para validar configuración

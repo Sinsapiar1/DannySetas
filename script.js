@@ -232,18 +232,8 @@ function setupContactForm() {
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
             
-            // Enviar con EmailJS (GRATIS)
-            if (window.CONFIG && window.CONFIG.emailjs.serviceId !== "service_tu_id") {
-                sendEmailWithEmailJS(name, email, message, submitBtn, originalText, this);
-            } 
-            // Enviar con Formspree (GRATIS alternativo)
-            else if (window.CONFIG && window.CONFIG.formspree.contactForm !== "https://formspree.io/f/tu_form_id") {
-                sendEmailWithFormspree(name, email, message, submitBtn, originalText, this);
-            }
-            // Fallback: WhatsApp
-            else {
-                sendViaWhatsApp(name, email, message, submitBtn, originalText, this);
-            }
+            // IR DIRECTO A WHATSAPP (más confiable)
+            sendViaWhatsApp(name, email, message, submitBtn, originalText, this);
         } else {
             showNotification('Por favor completa todos los campos', 'error');
         }
@@ -315,6 +305,8 @@ function sendEmailWithFormspree(name, email, message, submitBtn, originalText, f
 
 // 💬 ENVÍO VIA WHATSAPP (SIEMPRE FUNCIONA)
 function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
+    console.log('🔧 sendViaWhatsApp llamada con:', { name, email, message });
+    
     const whatsappMessage = `🏆 *NUEVO MENSAJE - DanySetas*
 
 👤 *Nombre:* ${name}
@@ -323,8 +315,12 @@ function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
 
 _Enviado desde www.danysetas.com_`;
     
+    console.log('📱 Mensaje generado:', whatsappMessage);
+    
     // Usar número principal DanySetas para contacto general
     const whatsappLink = window.generateContactWhatsAppLink(whatsappMessage);
+    
+    console.log('🔗 Link generado:', whatsappLink);
     
     setTimeout(() => {
         window.open(whatsappLink, '_blank');
@@ -723,14 +719,20 @@ function setupWhatsAppCart() {
     if (checkoutBtn) {
         checkoutBtn.textContent = 'Finalizar por WhatsApp';
         checkoutBtn.addEventListener('click', function() {
+            console.log('🛒 Botón checkout clickeado');
+            console.log('🛒 Carrito actual:', cart);
+            
             if (cart.length === 0) {
                 showNotification('Tu carrito está vacío', 'error');
                 return;
             }
             
             const whatsappMessage = generateCartWhatsAppMessage();
+            console.log('📱 Mensaje carrito generado:', whatsappMessage);
+            
             // Usar número de ventas (Mío Movistar) para el carrito
             const whatsappLink = window.generateSalesWhatsAppLink("", whatsappMessage);
+            console.log('🔗 Link carrito generado:', whatsappLink);
             
             window.open(whatsappLink, '_blank');
             showNotification('Redirigiendo a WhatsApp Ventas para finalizar compra...');
