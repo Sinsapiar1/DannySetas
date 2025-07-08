@@ -307,7 +307,30 @@ function sendEmailWithFormspree(name, email, message, submitBtn, originalText, f
 function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
     console.log('🔧 sendViaWhatsApp llamada con:', { name, email, message });
     
-    const whatsappMessage = `Hola, soy ${name}. Mi email es ${email}. ${message}`;
+    // Detectar tipo de dispositivo
+    const deviceType = getDeviceType();
+    const currentTime = new Date().toLocaleString('es-CL', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    
+    // Crear mensaje formal con información del dispositivo
+    const whatsappMessage = `🏪 *CONSULTA WEB - DANYSETAS*
+
+👤 *Datos del Cliente:*
+• Nombre: ${name}
+• Email: ${email}
+• Dispositivo: ${deviceType}
+• Fecha: ${currentTime}
+
+📝 *Mensaje:*
+${message}
+
+---
+*Mensaje enviado desde: www.danysetas.com*`;
     
     console.log('📱 Mensaje generado:', whatsappMessage);
     
@@ -330,6 +353,21 @@ function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
     
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
+}
+
+// Función para detectar tipo de dispositivo
+function getDeviceType() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    const isTablet = /ipad|android(?!.*mobile)/i.test(userAgent);
+    
+    if (isMobile && !isTablet) {
+        return '📱 Teléfono Móvil';
+    } else if (isTablet) {
+        return '📱 Tablet';
+    } else {
+        return '💻 Computadora';
+    }
 }
 
 // Configuración de animaciones
@@ -753,13 +791,41 @@ function setupWhatsAppCart() {
 
 // 💬 GENERAR MENSAJE DE WHATSAPP PARA CARRITO
 function generateCartWhatsAppMessage() {
-    let message = `NUEVA COMPRA - DanySetas\n\n`;
-    
-    cart.forEach((item, index) => {
-        message += `${index + 1}. ${item.name}\nPrecio: $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n\n`;
+    // Detectar tipo de dispositivo
+    const deviceType = getDeviceType();
+    const currentTime = new Date().toLocaleString('es-CL', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
     });
     
-    message += `TOTAL: $${cartTotal.toFixed(2)}\n\nPor favor confirma tu pedido y envíanos tus datos:\n- Nombre completo\n- Dirección de envío\n- Talla preferida\n\nEnviado desde www.danysetas.com`;
+    let message = `🛒 *NUEVO PEDIDO - DANYSETAS*
+
+📅 *Fecha:* ${currentTime}
+📱 *Dispositivo:* ${deviceType}
+
+🛍️ *Productos Seleccionados:*
+`;
+    
+    cart.forEach((item, index) => {
+        message += `${index + 1}. *${item.name}*
+   💰 Precio: $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}
+
+`;
+    });
+    
+    message += `💳 *TOTAL PEDIDO: $${cartTotal.toFixed(2)}*
+
+📋 *Para continuar, necesitamos estos datos:*
+• Nombre completo
+• Dirección de envío completa
+• Talla preferida
+• Método de pago preferido
+
+---
+*Pedido realizado desde: www.danysetas.com*`;
     
     return message;
 }
@@ -794,8 +860,32 @@ function createWhatsAppButton() {
     `;
     
     whatsappBtn.addEventListener('click', function() {
-        // Mensaje directo para botón flotante
-        const defaultMessage = "Hola! Estoy interesado en una camiseta de DanySetas. Podrías ayudarme?";
+        // Detectar tipo de dispositivo
+        const deviceType = getDeviceType();
+        const currentTime = new Date().toLocaleString('es-CL', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        // Mensaje formal para botón flotante
+        const defaultMessage = `🏪 *CONSULTA GENERAL - DANYSETAS*
+
+👋 ¡Hola! Estoy navegando en su sitio web y me gustaría recibir información sobre sus productos.
+
+📱 *Dispositivo:* ${deviceType}
+📅 *Fecha:* ${currentTime}
+
+¿Podrían ayudarme con información sobre:
+• Camisetas disponibles
+• Tallas y precios
+• Métodos de envío
+
+---
+*Consulta desde: www.danysetas.com*`;
+        
         const phoneNumber = "56942230636";
         const encodedMessage = encodeURIComponent(defaultMessage);
         const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
