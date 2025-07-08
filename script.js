@@ -307,20 +307,18 @@ function sendEmailWithFormspree(name, email, message, submitBtn, originalText, f
 function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
     console.log('🔧 sendViaWhatsApp llamada con:', { name, email, message });
     
-    const whatsappMessage = `NUEVO MENSAJE - DanySetas
-
-Nombre: ${name}
-Email: ${email}
-Mensaje: ${message}
-
-Enviado desde www.danysetas.com`;
+    const whatsappMessage = `NUEVO MENSAJE - DanySetas\n\nNombre: ${name}\nEmail: ${email}\nMensaje: ${message}\n\nEnviado desde www.danysetas.com`;
     
     console.log('📱 Mensaje generado:', whatsappMessage);
     
-    // Usar número principal DanySetas para contacto general
-    const whatsappLink = window.generateContactWhatsAppLink(whatsappMessage);
+    // Crear enlace directo sin funciones intermedias
+    const phoneNumber = "56942230636";
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     
     console.log('🔗 Link generado:', whatsappLink);
+    console.log('📞 Número:', phoneNumber);
+    console.log('💬 Mensaje codificado:', encodedMessage);
     
     setTimeout(() => {
         window.open(whatsappLink, '_blank');
@@ -730,9 +728,13 @@ function setupWhatsAppCart() {
             const whatsappMessage = generateCartWhatsAppMessage();
             console.log('📱 Mensaje carrito generado:', whatsappMessage);
             
-            // Usar número de ventas (Mío Movistar) para el carrito
-            const whatsappLink = window.generateSalesWhatsAppLink("", whatsappMessage);
+            // Crear enlace directo para ventas
+            const phoneNumber = "56964801119";
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
             console.log('🔗 Link carrito generado:', whatsappLink);
+            console.log('📞 Número ventas:', phoneNumber);
+            console.log('💬 Mensaje carrito codificado:', encodedMessage);
             
             window.open(whatsappLink, '_blank');
             showNotification('Redirigiendo a WhatsApp Ventas para finalizar compra...');
@@ -751,25 +753,13 @@ function setupWhatsAppCart() {
 
 // 💬 GENERAR MENSAJE DE WHATSAPP PARA CARRITO
 function generateCartWhatsAppMessage() {
-    let message = `NUEVA COMPRA - DanySetas
-
-`;
+    let message = `NUEVA COMPRA - DanySetas\n\n`;
     
     cart.forEach((item, index) => {
-        message += `${index + 1}. ${item.name}
-Precio: $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}
-
-`;
+        message += `${index + 1}. ${item.name}\nPrecio: $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n\n`;
     });
     
-    message += `TOTAL: $${cartTotal.toFixed(2)}
-
-Por favor confirma tu pedido y envíanos tus datos:
-- Nombre completo
-- Dirección de envío
-- Talla preferida
-
-Enviado desde www.danysetas.com`;
+    message += `TOTAL: $${cartTotal.toFixed(2)}\n\nPor favor confirma tu pedido y envíanos tus datos:\n- Nombre completo\n- Dirección de envío\n- Talla preferida\n\nEnviado desde www.danysetas.com`;
     
     return message;
 }
@@ -804,8 +794,13 @@ function createWhatsAppButton() {
     `;
     
     whatsappBtn.addEventListener('click', function() {
-        // Usar número principal DanySetas para consultas generales
-        const whatsappLink = window.generateContactWhatsAppLink();
+        // Mensaje directo para botón flotante
+        const defaultMessage = "Hola! Estoy interesado en una camiseta de DanySetas. Podrías ayudarme?";
+        const phoneNumber = "56942230636";
+        const encodedMessage = encodeURIComponent(defaultMessage);
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        
+        console.log('🔗 Botón flotante - Link:', whatsappLink);
         window.open(whatsappLink, '_blank');
         
         // Tracking
