@@ -779,6 +779,7 @@ body {
     
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
     
     .stats {
@@ -794,6 +795,58 @@ body {
     .btn-secondary {
         width: 100%;
         max-width: 250px;
+    }
+    
+    /* SOLUCIÓN PARA BOTONES DEL CARRITO EN MÓVIL */
+    .product-overlay {
+        position: static !important;
+        opacity: 1 !important;
+        background: transparent !important;
+        display: flex !important;
+        gap: 0.5rem;
+        padding: 1rem;
+        justify-content: center;
+    }
+    
+    .btn-cart, .btn-quick-view {
+        flex: 1;
+        padding: 1rem 0.5rem !important;
+        font-size: 0.9rem !important;
+        border-radius: 15px !important;
+        font-weight: 600 !important;
+        min-height: 50px !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .btn-cart {
+        background: #10b981 !important;
+        color: white !important;
+    }
+    
+    .btn-cart:active {
+        background: #059669 !important;
+        transform: scale(0.95);
+    }
+    
+    .btn-quick-view {
+        background: #6366f1 !important;
+        color: white !important;
+    }
+    
+    .btn-quick-view:active {
+        background: #4f46e5 !important;
+        transform: scale(0.95);
+    }
+    
+    .product-card {
+        border: 2px solid #e5e7eb;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .product-image {
+        height: 200px !important;
+        margin-bottom: 0 !important;
     }
 }
 
@@ -822,6 +875,51 @@ body {
     .jersey {
         width: 80px;
         height: 100px;
+    }
+    
+    /* MEJORAS ADICIONALES PARA MÓVILES PEQUEÑOS */
+    .product-overlay {
+        padding: 0.8rem !important;
+        gap: 0.3rem !important;
+        flex-direction: column !important;
+    }
+    
+    .btn-cart, .btn-quick-view {
+        width: 100% !important;
+        flex: none !important;
+        padding: 1.2rem 1rem !important;
+        font-size: 1rem !important;
+        min-height: 55px !important;
+        border-radius: 12px !important;
+    }
+    
+    .product-info {
+        padding: 1rem 1.2rem !important;
+    }
+    
+    .product-info h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    .product-price {
+        font-size: 1.4rem !important;
+    }
+    
+    .cart-modal .cart-content {
+        width: 95% !important;
+        padding: 1.5rem !important;
+    }
+    
+    .cart-icon {
+        position: relative;
+        margin-left: 1rem;
+    }
+    
+    .cart-count {
+        font-size: 0.8rem !important;
+        padding: 0.2rem 0.4rem !important;
+        min-width: 18px !important;
+        height: 18px !important;
     }
 }
 
@@ -859,4 +957,119 @@ html {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Optimizaciones específicas para dispositivos móviles */
+.mobile-device {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+.mobile-device .product-card {
+    transform: none !important;
+    transition: none !important;
+}
+
+.mobile-device .product-card:hover {
+    transform: none !important;
+}
+
+.mobile-device .btn-cart,
+.mobile-device .btn-quick-view {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.mobile-device .product-overlay {
+    transition: none !important;
+}
+
+/* Mejorar menú hamburguesa en móvil */
+.mobile-device .hamburger {
+    padding: 1rem;
+    margin: -1rem;
+}
+
+.mobile-device .nav-menu.active {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mejorar botones en móvil */
+.mobile-device button,
+.mobile-device .btn-primary,
+.mobile-device .btn-secondary,
+.mobile-device .btn-cart,
+.mobile-device .btn-quick-view {
+    min-height: 44px;
+    min-width: 44px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Feedback visual mejorado para touch */
+.mobile-device .btn-cart:active,
+.mobile-device .btn-quick-view:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-out;
+}
+
+/* Mejorar formularios en móvil */
+.mobile-device input,
+.mobile-device textarea {
+    font-size: 16px; /* Prevenir zoom en iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+}
+
+.mobile-device input:focus,
+.mobile-device textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Optimizar carrito en móvil */
+.mobile-device .cart-modal {
+    align-items: flex-start;
+    padding-top: 2rem;
+}
+
+.mobile-device .cart-content {
+    margin-top: 2rem;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    min-height: 50vh;
+}
+
+.mobile-device .close-cart {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

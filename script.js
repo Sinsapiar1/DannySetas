@@ -29,6 +29,9 @@ function initializeApp() {
     createWhatsAppButton();
     requestNotificationPermission();
     
+    // Mejoras específicas para móvil
+    setupMobileEnhancements();
+    
     // Agregar botón secreto para ver dashboard (presiona Ctrl+Shift+L)
     document.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.shiftKey && e.code === 'KeyL') {
@@ -84,6 +87,77 @@ function setupMobileMenu() {
         navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
     });
+    
+    // Cerrar menú al hacer click en un enlace
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
+    
+    // Cerrar menú al hacer click fuera
+    document.addEventListener('click', function(e) {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    });
+}
+
+// Mejoras específicas para dispositivos móviles
+function setupMobileEnhancements() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // Añadir clase mobile al body
+        document.body.classList.add('mobile-device');
+        
+        // Mejorar scroll en iOS
+        document.body.style.webkitOverflowScrolling = 'touch';
+        
+        // Prevenir zoom en inputs (iOS)
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                const viewport = document.querySelector('meta[name="viewport"]');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+            });
+            
+            input.addEventListener('blur', function() {
+                const viewport = document.querySelector('meta[name="viewport"]');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1');
+            });
+        });
+        
+        // Optimizar botones para touch
+        const buttons = document.querySelectorAll('button, .btn-primary, .btn-secondary, .btn-cart, .btn-quick-view');
+        buttons.forEach(button => {
+            button.style.touchAction = 'manipulation';
+            button.style.webkitTapHighlightColor = 'transparent';
+        });
+        
+        // Añadir feedback visual mejorado
+        const touchButtons = document.querySelectorAll('.btn-cart, .btn-quick-view');
+        touchButtons.forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.style.backgroundColor = this.style.backgroundColor || getComputedStyle(this).backgroundColor;
+                this.style.filter = 'brightness(0.9)';
+            });
+            
+            button.addEventListener('touchend', function() {
+                this.style.filter = 'brightness(1)';
+            });
+        });
+        
+        // Mejorar performance en mobile
+        if (CSS.supports('scroll-behavior', 'smooth')) {
+            document.documentElement.style.scrollBehavior = 'smooth';
+        }
+        
+        console.log('📱 Mejoras móviles activadas');
+    }
 }
 
 // Configuración de filtros de productos
@@ -139,18 +213,47 @@ function setupCart() {
         }
     });
     
-    // Configurar botones de agregar al carrito
+    // Configurar botones de agregar al carrito con soporte touch mejorado
     cartButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const productCard = this.closest('.product-card');
-            const productName = productCard.querySelector('h3').textContent;
-            const productPrice = productCard.querySelector('.product-price').textContent;
-            
-            addToCart(productName, productPrice);
-            showNotification('Producto agregado al carrito!');
+        // Evento click normal
+        button.addEventListener('click', handleAddToCart);
+        
+        // Eventos touch para mejor responsividad en móvil
+        button.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        button.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1)';
+            handleAddToCart.call(this, e);
+        });
+        
+        button.addEventListener('touchcancel', function(e) {
+            this.style.transform = 'scale(1)';
         });
     });
+}
+
+// Función separada para manejar agregar al carrito
+function handleAddToCart(e) {
+    e.stopPropagation();
+    console.log('🛒 Botón carrito clickeado');
+    
+    const productCard = this.closest('.product-card');
+    const productName = productCard.querySelector('h3').textContent;
+    const productPrice = productCard.querySelector('.product-price').textContent;
+    
+    console.log('📦 Producto:', productName, 'Precio:', productPrice);
+    
+    addToCart(productName, productPrice);
+    showNotification('¡Producto agregado al carrito!');
+    
+    // Vibración táctil si está disponible (móvil)
+    if ('vibrate' in navigator) {
+        navigator.vibrate(100);
+    }
 }
 
 // Función para agregar productos al carrito
