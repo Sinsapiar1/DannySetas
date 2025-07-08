@@ -307,11 +307,11 @@ function sendEmailWithFormspree(name, email, message, submitBtn, originalText, f
 function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
     console.log('🔧 sendViaWhatsApp llamada con:', { name, email, message });
     
-    const whatsappMessage = `NUEVO MENSAJE - DanySetas\n\nNombre: ${name}\nEmail: ${email}\nMensaje: ${message}\n\nEnviado desde www.danysetas.com`;
+    const whatsappMessage = `Hola, soy ${name}. Mi email es ${email}. ${message}`;
     
     console.log('📱 Mensaje generado:', whatsappMessage);
     
-    // Crear enlace directo sin funciones intermedias
+    // Crear enlace directo (IGUAL formato que carrito que funciona)
     const phoneNumber = "56942230636";
     const encodedMessage = encodeURIComponent(whatsappMessage);
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
@@ -728,7 +728,7 @@ function setupWhatsAppCart() {
             const whatsappMessage = generateCartWhatsAppMessage();
             console.log('📱 Mensaje carrito generado:', whatsappMessage);
             
-            // Crear enlace directo para ventas
+            // Crear enlace directo para ventas (MANTENER COMO ESTÁ - FUNCIONA)
             const phoneNumber = "56964801119";
             const encodedMessage = encodeURIComponent(whatsappMessage);
             const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
