@@ -666,28 +666,51 @@ body {
     display: flex;
     gap: 0.5rem;
     margin-top: 1rem;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 2px solid #10b981;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 }
 
 .newsletter input {
     flex: 1;
-    padding: 0.8rem;
-    border: none;
-    border-radius: 5px;
+    padding: 1rem;
+    border: 2px solid #10b981;
+    border-radius: 8px;
     font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.newsletter input:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .newsletter button {
-    padding: 0.8rem 1.5rem;
-    background: #10b981;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .newsletter button:hover {
-    background: #059669;
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.footer-section small {
+    display: block;
+    margin-top: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
 }
 
 .footer-bottom {
@@ -1162,4 +1185,295 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* 📧 NEWSLETTER POP-UP STYLES 📧 */
+.newsletter-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 3000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.newsletter-popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+.close-newsletter {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+    background: #f3f4f6;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-newsletter:hover {
+    background: #e5e7eb;
+    transform: scale(1.1);
+}
+
+.newsletter-popup-header {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 20px 20px 0 0;
+}
+
+.newsletter-popup-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.discount-text {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fbbf24;
+    margin: 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.newsletter-popup-body {
+    padding: 2rem;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.benefits-list li {
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #374151;
+}
+
+.newsletter-popup-form {
+    margin-top: 1.5rem;
+}
+
+.newsletter-popup-form input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #10b981;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.newsletter-popup-form input:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.newsletter-popup-form button {
+    width: 100%;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.newsletter-popup-form button:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* 🎉 SUCCESS MODAL STYLES 🎉 */
+.newsletter-success {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 3000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.newsletter-success-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    max-width: 450px;
+    width: 90%;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+.close-success {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+    background: #f3f4f6;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-success:hover {
+    background: #e5e7eb;
+    transform: scale(1.1);
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.newsletter-success-content h2 {
+    color: #10b981;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.discount-code {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    border: 2px solid #10b981;
+}
+
+.code-display {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #10b981;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 2px dashed #10b981;
+    margin: 1rem 0;
+    letter-spacing: 2px;
+}
+
+.copy-code {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.copy-code:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    transform: translateY(-2px);
+}
+
+.whatsapp-cta {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25d366, #20c55a);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #20c55a, #1db954);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+/* Animations for Newsletter */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to { 
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Responsive for Newsletter Pop-up */
+@media (max-width: 768px) {
+    .newsletter-popup-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .newsletter-popup-header {
+        padding: 1.5rem;
+    }
+    
+    .discount-text {
+        font-size: 2rem;
+    }
+    
+    .newsletter-popup-body {
+        padding: 1.5rem;
+    }
+    
+    .newsletter-success-content {
+        width: 95%;
+        margin: 1rem;
+    }
 }

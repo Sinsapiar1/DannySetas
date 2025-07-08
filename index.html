@@ -395,12 +395,14 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Newsletter</h3>
-                    <p>Suscríbete para recibir ofertas especiales</p>
+                    <h3>🎁 Newsletter Exclusivo</h3>
+                    <p><strong>¡Suscríbete y recibe un 15% de descuento!</strong></p>
+                    <p>Ofertas exclusivas, nuevos productos y descuentos especiales</p>
                     <div class="newsletter">
-                        <input type="email" placeholder="Tu email">
-                        <button>Suscribirse</button>
+                        <input type="email" placeholder="Tu email para descuento">
+                        <button>🎁 Obtener Descuento</button>
                     </div>
+                    <small>📧 Sin spam, solo ofertas increíbles</small>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -418,6 +420,51 @@
             <div class="cart-total">
                 <h3>Total: $0.00</h3>
                 <button class="btn-primary">Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Pop-up Modal -->
+    <div class="newsletter-popup" id="newsletterPopup">
+        <div class="newsletter-popup-content">
+            <span class="close-newsletter">&times;</span>
+            <div class="newsletter-popup-header">
+                <h2>🎁 ¡Oferta Especial!</h2>
+                <p class="discount-text">15% DE DESCUENTO</p>
+                <p>en tu primera compra</p>
+            </div>
+            <div class="newsletter-popup-body">
+                <p>Suscríbete a nuestro newsletter y recibe:</p>
+                <ul class="benefits-list">
+                    <li>✅ 15% de descuento inmediato</li>
+                    <li>✅ Ofertas exclusivas</li>
+                    <li>✅ Nuevos productos primero</li>
+                    <li>✅ Descuentos especiales</li>
+                </ul>
+                <form class="newsletter-popup-form">
+                    <input type="email" placeholder="Ingresa tu email aquí" required>
+                    <button type="submit">🎁 Obtener Mi Descuento</button>
+                </form>
+                <small>📧 No spam, solo ofertas increíbles. Cancela cuando quieras.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Success Modal -->
+    <div class="newsletter-success" id="newsletterSuccess">
+        <div class="newsletter-success-content">
+            <span class="close-success">&times;</span>
+            <div class="success-icon">🎉</div>
+            <h2>¡Felicitaciones!</h2>
+            <p>Tu descuento del <strong>15%</strong> está listo</p>
+            <div class="discount-code">
+                <p>Usa el código:</p>
+                <div class="code-display">DANYSETAS15</div>
+                <button class="copy-code">📋 Copiar Código</button>
+            </div>
+            <div class="whatsapp-cta">
+                <p>¿Necesitas ayuda con tu pedido?</p>
+                <button class="whatsapp-btn">💬 Contáctanos por WhatsApp</button>
             </div>
         </div>
     </div>

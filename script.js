@@ -669,10 +669,44 @@ function showSpecialOffers() {
     });
 }
 
-// Configuración del newsletter con funcionalidad REAL
+// 📧 SISTEMA COMPLETO DE NEWSLETTER CON POP-UP Y DESCUENTOS
 function setupNewsletter() {
     const newsletterForm = document.querySelector('.newsletter');
+    const newsletterPopup = document.getElementById('newsletterPopup');
+    const newsletterSuccess = document.getElementById('newsletterSuccess');
+    const closeNewsletter = document.querySelector('.close-newsletter');
+    const closeSuccess = document.querySelector('.close-success');
+    const popupForm = document.querySelector('.newsletter-popup-form');
+    const copyCodeBtn = document.querySelector('.copy-code');
+    const whatsappBtn = document.querySelector('.whatsapp-btn');
     
+    // 🎯 MOSTRAR POP-UP DESPUÉS DE 30 SEGUNDOS
+    setTimeout(() => {
+        if (!localStorage.getItem('newsletter_shown')) {
+            showNewsletterPopup();
+        }
+    }, 30000);
+    
+    // 🎯 MOSTRAR POP-UP CUANDO EL USUARIO ESTÁ POR SALIR
+    let mouseLeaveTimer;
+    document.addEventListener('mouseleave', function(e) {
+        if (e.clientY <= 0 && !localStorage.getItem('newsletter_shown')) {
+            clearTimeout(mouseLeaveTimer);
+            mouseLeaveTimer = setTimeout(() => {
+                showNewsletterPopup();
+            }, 500);
+        }
+    });
+    
+    // 🎯 MOSTRAR POP-UP AL SCROLLEAR 70% DE LA PÁGINA
+    window.addEventListener('scroll', function() {
+        const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercentage > 70 && !localStorage.getItem('newsletter_shown')) {
+            showNewsletterPopup();
+        }
+    });
+    
+    // 🎯 CONFIGURAR FORMULARIO DEL FOOTER
     newsletterForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const email = this.querySelector('input').value;
@@ -683,26 +717,159 @@ function setupNewsletter() {
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
             
-            // Enviar con Formspree (GRATIS)
-            if (window.CONFIG && window.CONFIG.formspree.newsletter !== "https://formspree.io/f/tu_newsletter_id") {
-                subscribeWithFormspree(email, submitBtn, originalText, this);
-            }
-            // Enviar con EmailJS (GRATIS alternativo)
-            else if (window.CONFIG && window.CONFIG.emailjs.serviceId !== "service_tu_id") {
-                subscribeWithEmailJS(email, submitBtn, originalText, this);
-            }
-            // Fallback: Guardar local y WhatsApp
-            else {
-                subscribeLocally(email, submitBtn, originalText, this);
-            }
+            processNewsletterSubscription(email, submitBtn, originalText, this);
         } else {
             showNotification('Por favor ingresa un email válido', 'error');
         }
     });
+    
+    // 🎯 CONFIGURAR FORMULARIO DEL POP-UP
+    if (popupForm) {
+        popupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            
+            if (email && isValidEmail(email)) {
+                const submitBtn = this.querySelector('button');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Procesando...';
+                submitBtn.disabled = true;
+                
+                processNewsletterSubscription(email, submitBtn, originalText, this, true);
+            } else {
+                showNotification('Por favor ingresa un email válido', 'error');
+            }
+        });
+    }
+    
+    // 🎯 CERRAR MODALES
+    if (closeNewsletter) {
+        closeNewsletter.addEventListener('click', function() {
+            closeNewsletterPopup();
+        });
+    }
+    
+    if (closeSuccess) {
+        closeSuccess.addEventListener('click', function() {
+            closeSuccessModal();
+        });
+    }
+    
+    // 🎯 CERRAR CON ESCAPE
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeNewsletterPopup();
+            closeSuccessModal();
+        }
+    });
+    
+    // 🎯 CERRAR AL HACER CLICK FUERA
+    if (newsletterPopup) {
+        newsletterPopup.addEventListener('click', function(e) {
+            if (e.target === newsletterPopup) {
+                closeNewsletterPopup();
+            }
+        });
+    }
+    
+    if (newsletterSuccess) {
+        newsletterSuccess.addEventListener('click', function(e) {
+            if (e.target === newsletterSuccess) {
+                closeSuccessModal();
+            }
+        });
+    }
+    
+    // 🎯 COPIAR CÓDIGO DE DESCUENTO
+    if (copyCodeBtn) {
+        copyCodeBtn.addEventListener('click', function() {
+            const codeText = 'DANYSETAS15';
+            navigator.clipboard.writeText(codeText).then(() => {
+                this.textContent = '✅ ¡Copiado!';
+                setTimeout(() => {
+                    this.textContent = '📋 Copiar Código';
+                }, 2000);
+                showNotification('¡Código copiado al portapapeles!');
+            }).catch(() => {
+                showNotification('Código: DANYSETAS15', 'error');
+            });
+        });
+    }
+    
+    // 🎯 WHATSAPP BUTTON
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', function() {
+            const deviceType = getDeviceType();
+            const currentTime = new Date().toLocaleString('es-CL');
+            
+            const message = `🎁 *CÓDIGO DE DESCUENTO OBTENIDO*
+
+¡Hola! Acabo de suscribirme al newsletter y obtuve mi código de descuento del 15%.
+
+🏷️ *Código:* DANYSETAS15
+📱 *Dispositivo:* ${deviceType}
+📅 *Fecha:* ${currentTime}
+
+¿Podrían ayudarme a usar el descuento en mi compra?
+
+---
+*Newsletter: www.danysetas.com*`;
+            
+            const phoneNumber = "56942230636";
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            
+            window.open(whatsappLink, '_blank');
+            closeSuccessModal();
+        });
+    }
+    
+    // 🎯 FUNCIONES AUXILIARES
+    function showNewsletterPopup() {
+        if (newsletterPopup) {
+            newsletterPopup.style.display = 'block';
+            localStorage.setItem('newsletter_shown', 'true');
+            
+            // Tracking
+            if (window.gtag) {
+                window.gtag('event', 'newsletter_popup_shown', {
+                    event_category: 'engagement',
+                    event_label: 'popup'
+                });
+            }
+        }
+    }
+    
+    function closeNewsletterPopup() {
+        if (newsletterPopup) {
+            newsletterPopup.style.display = 'none';
+        }
+    }
+    
+    function closeSuccessModal() {
+        if (newsletterSuccess) {
+            newsletterSuccess.style.display = 'none';
+        }
+    }
+    
+    function processNewsletterSubscription(email, submitBtn, originalText, form, isPopup = false) {
+        // Enviar con Formspree (GRATIS)
+        if (window.CONFIG && window.CONFIG.formspree.newsletter !== "https://formspree.io/f/tu_newsletter_id") {
+            subscribeWithFormspree(email, submitBtn, originalText, form, isPopup);
+        }
+        // Enviar con EmailJS (GRATIS alternativo)
+        else if (window.CONFIG && window.CONFIG.emailjs.serviceId !== "service_tu_id") {
+            subscribeWithEmailJS(email, submitBtn, originalText, form, isPopup);
+        }
+        // Fallback: Guardar local y WhatsApp
+        else {
+            subscribeLocally(email, submitBtn, originalText, form, isPopup);
+        }
+    }
 }
 
 // 📧 SUSCRIPCIÓN CON FORMSPREE (GRATIS)
-function subscribeWithFormspree(email, submitBtn, originalText, form) {
+function subscribeWithFormspree(email, submitBtn, originalText, form, isPopup = false) {
     const formData = new FormData();
     formData.append('email', email);
     formData.append('type', 'newsletter');
@@ -715,7 +882,12 @@ function subscribeWithFormspree(email, submitBtn, originalText, form) {
         }
     }).then(function(response) {
         if (response.ok) {
-            showNotification('¡Gracias por suscribirte!');
+            if (isPopup) {
+                showSuccessModal();
+                sendNewsletterToWhatsApp(email);
+            } else {
+                showNotification('¡Gracias por suscribirte! 🎁 Tu descuento: DANYSETAS15');
+            }
             form.reset();
             // Guardar lead en localStorage
             saveLeadToStorage('', email, 'newsletter');
@@ -725,7 +897,7 @@ function subscribeWithFormspree(email, submitBtn, originalText, form) {
     }).catch(function(error) {
         console.error('Error:', error);
         // Fallback a almacenamiento local
-        subscribeLocally(email, submitBtn, originalText, form);
+        subscribeLocally(email, submitBtn, originalText, form, isPopup);
     }).finally(function() {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
@@ -733,7 +905,7 @@ function subscribeWithFormspree(email, submitBtn, originalText, form) {
 }
 
 // 📧 SUSCRIPCIÓN CON EMAILJS (GRATIS)
-function subscribeWithEmailJS(email, submitBtn, originalText, form) {
+function subscribeWithEmailJS(email, submitBtn, originalText, form, isPopup = false) {
     const templateParams = {
         subscriber_email: email,
         to_email: window.CONFIG.business.email,
@@ -746,14 +918,19 @@ function subscribeWithEmailJS(email, submitBtn, originalText, form) {
         templateParams,
         window.CONFIG.emailjs.publicKey
     ).then(function(response) {
-        showNotification('¡Gracias por suscribirte!');
+        if (isPopup) {
+            showSuccessModal();
+            sendNewsletterToWhatsApp(email);
+        } else {
+            showNotification('¡Gracias por suscribirte! 🎁 Tu descuento: DANYSETAS15');
+        }
         form.reset();
         // Guardar lead en localStorage
         saveLeadToStorage('', email, 'newsletter');
     }).catch(function(error) {
         console.error('Error:', error);
         // Fallback a almacenamiento local
-        subscribeLocally(email, submitBtn, originalText, form);
+        subscribeLocally(email, submitBtn, originalText, form, isPopup);
     }).finally(function() {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
@@ -761,14 +938,75 @@ function subscribeWithEmailJS(email, submitBtn, originalText, form) {
 }
 
 // 💾 SUSCRIPCIÓN LOCAL (SIEMPRE FUNCIONA)
-function subscribeLocally(email, submitBtn, originalText, form) {
-    showNotification('¡Gracias por suscribirte!');
+function subscribeLocally(email, submitBtn, originalText, form, isPopup = false) {
+    if (isPopup) {
+        // Mostrar modal de éxito para pop-up
+        showSuccessModal();
+        // Enviar notificación a WhatsApp
+        sendNewsletterToWhatsApp(email);
+    } else {
+        showNotification('¡Gracias por suscribirte! 🎁 Tu descuento: DANYSETAS15');
+    }
+    
     form.reset();
     // Guardar lead en localStorage
     saveLeadToStorage('', email, 'newsletter');
     
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
+}
+
+// 🎉 MOSTRAR MODAL DE ÉXITO
+function showSuccessModal() {
+    const newsletterSuccess = document.getElementById('newsletterSuccess');
+    const newsletterPopup = document.getElementById('newsletterPopup');
+    
+    newsletterPopup.style.display = 'none';
+    newsletterSuccess.style.display = 'block';
+    
+    // Tracking
+    if (window.gtag) {
+        window.gtag('event', 'newsletter_conversion', {
+            event_category: 'conversion',
+            event_label: 'discount_code'
+        });
+    }
+}
+
+// 📱 ENVIAR NUEVA SUSCRIPCIÓN A WHATSAPP
+function sendNewsletterToWhatsApp(email) {
+    const deviceType = getDeviceType();
+    const currentTime = new Date().toLocaleString('es-CL', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    
+    const message = `📧 *NUEVA SUSCRIPCIÓN - NEWSLETTER*
+
+👤 *Nuevo Suscriptor:*
+• Email: ${email}
+• Dispositivo: ${deviceType}
+• Fecha: ${currentTime}
+
+🎁 *Descuento Generado:*
+• Código: DANYSETAS15
+• Descuento: 15%
+• Válido: Primera compra
+
+---
+*Suscripción desde: www.danysetas.com*`;
+    
+    const phoneNumber = "56942230636";
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    console.log('📧 Nueva suscripción enviada a WhatsApp:', email);
+    
+    // Enviar automáticamente (opcional - se puede deshabilitar)
+    // window.open(whatsappLink, '_blank');
 }
 
 // Función para vista rápida de productos
