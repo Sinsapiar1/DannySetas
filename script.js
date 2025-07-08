@@ -321,7 +321,8 @@ function sendViaWhatsApp(name, email, message, submitBtn, originalText, form) {
                            `💬 *Mensaje:* ${message}\n\n` +
                            `_Enviado desde www.danysetas.com_`;
     
-    const whatsappLink = window.generateWhatsAppLink("", whatsappMessage);
+    // Usar número principal DanySetas para contacto general
+    const whatsappLink = window.generateContactWhatsAppLink(whatsappMessage);
     
     setTimeout(() => {
         window.open(whatsappLink, '_blank');
@@ -726,10 +727,11 @@ function setupWhatsAppCart() {
             }
             
             const whatsappMessage = generateCartWhatsAppMessage();
-            const whatsappLink = window.generateWhatsAppLink("", whatsappMessage);
+            // Usar número de ventas (Mío Movistar) para el carrito
+            const whatsappLink = window.generateSalesWhatsAppLink("", whatsappMessage);
             
             window.open(whatsappLink, '_blank');
-            showNotification('Redirigiendo a WhatsApp para finalizar compra...');
+            showNotification('Redirigiendo a WhatsApp Ventas para finalizar compra...');
             
             // Guardar evento de conversión
             if (window.gtag) {
@@ -792,7 +794,8 @@ function createWhatsAppButton() {
     `;
     
     whatsappBtn.addEventListener('click', function() {
-        const whatsappLink = window.generateWhatsAppLink();
+        // Usar número principal DanySetas para consultas generales
+        const whatsappLink = window.generateContactWhatsAppLink();
         window.open(whatsappLink, '_blank');
         
         // Tracking

@@ -7,10 +7,11 @@ const CONFIG = {
     // Tu información de contacto
     business: {
         name: "DanySetas",
-        phone: "+54 11 1234-5678", // Cambiar por tu número real
-        whatsapp: "5491123456789", // Cambiar por tu número de WhatsApp (sin + ni espacios)
+        phone: "+56 9 4223 0636", // Número principal DanySetas
+        whatsapp: "56942230636", // WhatsApp principal (sin + ni espacios)
+        whatsapp_secondary: "56964801119", // WhatsApp secundario Mío Movistar
         email: "info@danysetas.com", // Cambiar por tu email real
-        address: "Av. Corrientes 1234, Buenos Aires, Argentina"
+        address: "Chile" // Cambiar por tu dirección real
     },
     
     // 📧 EMAILJS (Servicio gratuito de emails)
@@ -51,14 +52,27 @@ const CONFIG = {
 // FUNCIONES AUXILIARES
 // ========================================
 
-// Función para generar enlaces de WhatsApp
-function generateWhatsAppLink(product = "", message = "") {
+// Función para generar enlaces de WhatsApp con doble número
+function generateWhatsAppLink(product = "", message = "", useSecondary = false) {
     const baseMessage = message || CONFIG.whatsapp.defaultMessage;
     const fullMessage = product ? 
         `${baseMessage}\n\nProducto: ${product}` : 
         baseMessage;
     
-    return `https://wa.me/${CONFIG.business.whatsapp}?text=${encodeURIComponent(fullMessage)}`;
+    // Usar número secundario para ventas, principal para contacto general
+    const whatsappNumber = useSecondary ? CONFIG.business.whatsapp_secondary : CONFIG.business.whatsapp;
+    
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
+}
+
+// Función específica para ventas (usa el número Mío Movistar)
+function generateSalesWhatsAppLink(product = "", message = "") {
+    return generateWhatsAppLink(product, message, true);
+}
+
+// Función específica para contacto general (usa el número DanySetas)
+function generateContactWhatsAppLink(message = "") {
+    return generateWhatsAppLink("", message, false);
 }
 
 // Función para validar configuración
@@ -87,4 +101,6 @@ function validateConfig() {
 // Exportar configuración
 window.CONFIG = CONFIG;
 window.generateWhatsAppLink = generateWhatsAppLink;
+window.generateSalesWhatsAppLink = generateSalesWhatsAppLink;
+window.generateContactWhatsAppLink = generateContactWhatsAppLink;
 window.validateConfig = validateConfig;
