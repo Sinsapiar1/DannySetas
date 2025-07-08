@@ -194,6 +194,7 @@ function setupCart() {
     const cartModal = document.getElementById('cartModal');
     const closeCart = document.querySelector('.close-cart');
     const cartButtons = document.querySelectorAll('.btn-cart');
+    const mobileCartButtons = document.querySelectorAll('.btn-cart-mobile');
     
     // Abrir modal del carrito
     cartIcon.addEventListener('click', function() {
@@ -213,7 +214,7 @@ function setupCart() {
         }
     });
     
-    // Configurar botones de agregar al carrito con soporte touch mejorado
+    // Configurar botones de agregar al carrito con soporte touch mejorado (desktop)
     cartButtons.forEach(button => {
         // Evento click normal
         button.addEventListener('click', handleAddToCart);
@@ -231,6 +232,44 @@ function setupCart() {
         });
         
         button.addEventListener('touchcancel', function(e) {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // 🔥 CONFIGURAR BOTONES MÓVILES DIRECTOS 🔥
+    mobileCartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔥 Botón móvil carrito clickeado');
+            
+            const productCard = this.closest('.product-card');
+            const productName = productCard.querySelector('h3').textContent;
+            const productPrice = productCard.querySelector('.product-price').textContent;
+            
+            console.log('📦 Producto móvil:', productName, 'Precio:', productPrice);
+            
+            addToCart(productName, productPrice);
+            showNotification('¡Producto agregado al carrito! 🛒');
+            
+            // Vibración táctil si está disponible (móvil)
+            if ('vibrate' in navigator) {
+                navigator.vibrate(100);
+            }
+            
+            // Efecto visual
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+        
+        // Eventos touch mejorados para botones móviles
+        button.addEventListener('touchstart', function(e) {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        button.addEventListener('touchend', function(e) {
             this.style.transform = 'scale(1)';
         });
     });

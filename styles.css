@@ -797,56 +797,70 @@ body {
         max-width: 250px;
     }
     
-    /* SOLUCIÓN PARA BOTONES DEL CARRITO EN MÓVIL */
+    /* 🔥 SOLUCIÓN EXTREMA PARA BOTONES DEL CARRITO EN MÓVIL 🔥 */
     .product-overlay {
         position: static !important;
         opacity: 1 !important;
         background: transparent !important;
         display: flex !important;
-        gap: 0.5rem;
-        padding: 1rem;
-        justify-content: center;
+        gap: 0.5rem !important;
+        padding: 1rem !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
     
     .btn-cart, .btn-quick-view {
-        flex: 1;
-        padding: 1rem 0.5rem !important;
-        font-size: 0.9rem !important;
+        flex: 1 !important;
+        padding: 1.2rem 0.8rem !important;
+        font-size: 1rem !important;
         border-radius: 15px !important;
-        font-weight: 600 !important;
-        min-height: 50px !important;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
+        font-weight: 700 !important;
+        min-height: 55px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+        cursor: pointer !important;
+        border: none !important;
+        display: block !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        white-space: nowrap !important;
     }
     
     .btn-cart {
         background: #10b981 !important;
         color: white !important;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
     }
     
-    .btn-cart:active {
+    .btn-cart:active, .btn-cart:focus {
         background: #059669 !important;
-        transform: scale(0.95);
+        transform: scale(0.95) !important;
     }
     
     .btn-quick-view {
         background: #6366f1 !important;
         color: white !important;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
     }
     
-    .btn-quick-view:active {
+    .btn-quick-view:active, .btn-quick-view:focus {
         background: #4f46e5 !important;
-        transform: scale(0.95);
+        transform: scale(0.95) !important;
     }
     
     .product-card {
-        border: 2px solid #e5e7eb;
+        border: 2px solid #e5e7eb !important;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+        margin-bottom: 1rem !important;
     }
     
     .product-image {
         height: 200px !important;
         margin-bottom: 0 !important;
+    }
+    
+    .product-info {
+        padding: 1rem !important;
     }
 }
 
@@ -877,20 +891,23 @@ body {
         height: 100px;
     }
     
-    /* MEJORAS ADICIONALES PARA MÓVILES PEQUEÑOS */
+    /* 🔥 BOTONES DEL CARRITO APILADOS VERTICALMENTE EN MÓVILES PEQUEÑOS 🔥 */
     .product-overlay {
         padding: 0.8rem !important;
-        gap: 0.3rem !important;
+        gap: 0.5rem !important;
         flex-direction: column !important;
     }
     
     .btn-cart, .btn-quick-view {
         width: 100% !important;
         flex: none !important;
-        padding: 1.2rem 1rem !important;
-        font-size: 1rem !important;
-        min-height: 55px !important;
+        padding: 1.3rem 1rem !important;
+        font-size: 1.1rem !important;
+        min-height: 60px !important;
         border-radius: 12px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
     }
     
     .product-info {
@@ -920,6 +937,79 @@ body {
         padding: 0.2rem 0.4rem !important;
         min-width: 18px !important;
         height: 18px !important;
+    }
+}
+
+/* 🚀 BOTONES MÓVILES DIRECTOS EN PRODUCT-INFO 🚀 */
+.mobile-buttons {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-cart-mobile, .btn-quick-view-mobile {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-cart-mobile {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-cart-mobile:hover, .btn-cart-mobile:active {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-quick-view-mobile {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-quick-view-mobile:hover, .btn-quick-view-mobile:active {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* 🚀 MOSTRAR BOTONES MÓVILES SOLO EN MÓVIL 🚀 */
+@media (max-width: 768px) {
+    .mobile-buttons {
+        display: flex !important;
+    }
+    
+    .product-overlay {
+        display: none !important;
+    }
+    
+    .product-info {
+        position: relative;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-cart-mobile, .btn-quick-view-mobile {
+        padding: 1.2rem 1.5rem;
+        font-size: 1.1rem;
+        min-height: 55px;
     }
 }
 
